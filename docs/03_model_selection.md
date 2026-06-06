@@ -62,13 +62,13 @@ model_lr.fit(X_train_scaled, y_train)
 ### Configuration
 ```python
 from sklearn.ensemble import RandomForestRegressor
-model_rf = RandomForestRegressor(n_estimators=200, random_state=42, n_jobs=-1)
+model_rf = RandomForestRegressor(n_estimators=200, random_state=29, n_jobs=-1)
 model_rf.fit(X_train, y_train)
 ```
 
 **Key hyperparameters:**
 - `n_estimators=200`: Balance between performance and training time
-- `random_state=42`: Ensures reproducibility
+- `random_state=29`: Ensures reproducibility
 - `n_jobs=-1`: Use all CPU cores
 
 ---
@@ -102,7 +102,7 @@ model_xgb = XGBRegressor(
     max_depth=5,
     subsample=0.8,
     colsample_bytree=0.8,
-    random_state=42,
+    random_state=29,
     verbosity=0
 )
 model_xgb.fit(X_train, y_train)

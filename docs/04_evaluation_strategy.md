@@ -14,7 +14,7 @@ We use an **80/20 stratified random split**:
 from sklearn.model_selection import train_test_split
 
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
+    X, y, test_size=0.2, random_state=29
 )
 ```
 
@@ -140,4 +140,4 @@ Final comparison table:
 - [ ] StandardScaler fitted only on training data
 - [ ] Test set never used for model selection or hyperparameter tuning
 - [ ] Cross-validation applied only within the training set
-- [ ] Random seed fixed (`random_state=42`) for all stochastic steps
+- [ ] Random seed fixed (`random_state=29`) for all stochastic steps

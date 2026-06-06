@@ -133,7 +133,7 @@ Three regression models must be trained and compared:
 - Use **functions** for all reusable logic (no copy-paste code)
 - Add docstrings to every function
 - Use **meaningful variable names**
-- Use `random_state=42` for all stochastic operations
+- Use `random_state=29` for all stochastic operations
 - Comment non-obvious logic inline
 - Section headers as Markdown cells; code in code cells
 
