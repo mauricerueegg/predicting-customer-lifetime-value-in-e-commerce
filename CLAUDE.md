@@ -65,6 +65,85 @@ Important Note on AI Usage
 AI is considered a supporting tool, not a source of truth.
 All outputs must be critically evaluated and validated.
 
+---
 
+## Implementation Reference
 
+### Dataset
 
+- **File:** `01_data/topic_E2_customer_lifetime_value_raw.csv`
+- **Rows:** 1100 | **Columns:** 11 (10 features + 1 target)
+- **Seed:** `np.random.seed(808)` — ensures reproducibility
+- **Target:** `customer_lifetime_value_chf` (continuous, min 20 CHF)
+
+| Column | Type | Description |
+|--------|------|-------------|
+| customer_tenure_months | int | Months since first purchase (1–60) |
+| purchase_count_last_12m | int | Number of purchases in last 12 months (0–45) |
+| avg_order_value_chf | float | Average order value in CHF (10–400) |
+| return_rate | float | Proportion of returned orders (0–1) |
+| website_visits_last_3m | int | Website visits in last 3 months |
+| email_click_rate | float | Email engagement rate (0–1) |
+| customer_segment | category | "new", "occasional", "loyal", "premium" |
+| preferred_device | category | "mobile", "desktop", "tablet" |
+| support_tickets_last_12m | int | Support tickets filed in last 12 months (0–12) |
+| discount_usage_rate | float | Rate of discount usage (0–1) |
+| **customer_lifetime_value_chf** | **float** | **TARGET — CLV in CHF** |
+
+### Required Libraries
+
+```
+pandas, numpy
+matplotlib, seaborn
+scikit-learn (LinearRegression, RandomForestRegressor, StandardScaler, train_test_split, cross_val_score, mean_squared_error, mean_absolute_error, r2_score)
+xgboost (XGBRegressor)
+shap
+```
+
+Install missing packages in a cell at the top of the notebook if needed:
+```python
+# !pip install xgboost shap
+```
+
+### Models
+
+Three regression models must be trained and compared:
+
+1. **Linear Regression** (sklearn) — linear baseline; use scaled features
+2. **Random Forest Regressor** (sklearn) — ensemble, handles non-linearity
+3. **XGBoost Regressor** (xgboost) — gradient boosting, best for complex interactions
+
+### Evaluation Metrics
+
+- **RMSE** — root mean squared error (primary metric)
+- **MAE** — mean absolute error (robust to outliers)
+- **R²** — coefficient of determination (explained variance)
+- **5-fold cross-validation** on training set for all models
+
+### SHAP Analysis
+
+- `shap.LinearExplainer` for Linear Regression
+- `shap.TreeExplainer` for Random Forest and XGBoost
+- Global: `shap.summary_plot()` (beeswarm + bar)
+- Local: `shap.waterfall_plot()` for individual predictions
+- Interaction: `shap.dependence_plot()` for top features
+
+### Code Style
+
+- Use **functions** for all reusable logic (no copy-paste code)
+- Add docstrings to every function
+- Use **meaningful variable names**
+- Use `random_state=42` for all stochastic operations
+- Comment non-obvious logic inline
+- Section headers as Markdown cells; code in code cells
+
+### Documentation
+
+All design decisions are documented in `/docs/`:
+- `00_project_overview.md` — project context and deliverables
+- `01_data_description.md` — dataset schema and generation logic
+- `02_feature_engineering.md` — feature engineering decisions
+- `03_model_selection.md` — model choice rationale
+- `04_evaluation_strategy.md` — metrics and validation approach
+- `05_shap_methodology.md` — SHAP theory and interpretation
+- `06_ai_usage_template.md` — template for AI usage documentation
