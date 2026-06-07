@@ -1,26 +1,20 @@
-# 06 – AI Usage Documentation Template
+# 06 – AI Usage Documentation
 
-> Fill in this section in notebook.ipynb (Section 7). Replace all `[placeholder]` text with your actual content. Add more example prompts if you used more.
-
----
-
-## 7. AI Usage Documentation
-
-*Note: This section documents the use of AI tools (Claude Code / Claude Sonnet) in the development of this project. AI is treated as a supporting tool — all outputs were critically evaluated, verified, and adapted by the student.*
+> This document summarises the AI usage practices applied in this project. The full, detailed version is in `notebook.ipynb` Section 7.
 
 ---
 
-### 7.1 Role of AI
+## 7.1 Role of AI
 
-AI tools (specifically Claude Code with the Claude Sonnet model) were used for the following tasks in this project:
+AI tools (Claude Code with Claude Sonnet) were used as a supporting tool throughout the project:
 
 | Stage | AI Role |
 |-------|---------|
-| Project planning | Helped structure the notebook into sections, identify required steps, and create `/docs/` documentation |
-| Feature engineering | Suggested engineered features (`total_spend_proxy`, `engagement_score`) and explained the rationale |
-| Code implementation | Generated function-based implementations for model training, evaluation, and SHAP analysis |
-| Documentation | Created initial drafts of `/docs/` markdown files explaining methodology choices |
-| Debugging | [Describe any debugging assistance you received] |
+| Project planning | Structured the notebook into sections, created implementation plan |
+| Documentation | Generated initial drafts of all `/docs/` markdown files |
+| Code generation | Implemented function-based code for models, evaluation, and SHAP |
+| Feature engineering | Suggested new feature ideas (e.g., `total_spend_proxy`, `engagement_score`) |
+| Debugging | Resolved SHAP compatibility issues (e.g., constructing `shap.Explanation` objects for waterfall plots) and fixed plotting issues |
 
 **What AI did NOT do:**
 - AI did not make final decisions about model choices — those were confirmed by the student
@@ -29,72 +23,66 @@ AI tools (specifically Claude Code with the Claude Sonnet model) were used for t
 
 ---
 
-### 7.2 Prompting Strategy
+## 7.2 Prompting Strategy
 
-**Example Prompt 1 — Project planning:**
-> "Help me create the plan and updated CLAUDE.md file. I want to predict customer lifetime value using regression and XAI. My focus is Focus E: Supervised Learning: Regression and XAI. Ask me if you have questions."
+Three example prompts illustrate the strategy used throughout the project:
 
-*Why this prompt worked:* It was specific about the focus area, gave the full context of the project, and invited follow-up questions. This allowed the AI to ask clarifying questions (e.g., which non-linear model, which language) rather than making assumptions.
+**Prompt 1 — Creating an instruction file for the AI:**
+A detailed prompt specified all sections to include in a `CLAUDE.md` file: project description, dataset reference (all 11 columns with types and value ranges), domain context (e-commerce CLV challenges such as skewed distributions, customer heterogeneity, correlation vs. causation), model selection and assumptions, evaluation metrics, SHAP methodology, and code style requirements. This front-loaded all project context into a persistent reference file, making subsequent prompts shorter and more focused.
 
-**Example Prompt 2 — Documentation:**
-> "Create the /docs/ markdown files for the project. Each file should document why and how something is done, not just what."
+**Prompt 2 — Overfitting diagnosis and visualisation:**
+Started with the concrete problem (Random Forest train RMSE ~59 vs. test RMSE ~143 — a gap of 140%) and requested specific diagnostics by name: train-vs-test comparison table, residual plots, VIF, Breusch-Pagan, Durbin-Watson, and Cook's distance. Explicitly instructed the AI not to suggest fixes yet — "understand before changing" — preventing the AI from jumping to solutions without characterising the issue first.
 
-*Why this prompt worked:* The emphasis on "why and how" steered the AI away from shallow descriptions toward explanatory content with rationale — which is the most valuable part for a student project.
-
-**Example Prompt 3 — [Add your own example]:**
-> "[Your prompt here]"
-
-*Why this prompt worked:* [Your explanation here]
+**Prompt 3 — Feature engineering through combination and decomposition:**
+Structured the task into two strategies: (1) feature combination (multiply/divide existing features to capture interactions) and (2) feature decomposition (split or bin continuous features). Required business rationale and trade-off analysis per suggestion, with an explicit constraint about the small dataset size (1,100 rows). Despite this constraint, the AI still suggested more features than were ultimately useful — only two made it into the final model.
 
 ---
 
-### 7.3 Orchestration & Timing
+## 7.3 Orchestration & Timing
 
-| Project Stage | AI Used? | How |
-|---------------|----------|-----|
-| Initial setup (CLAUDE.md, docs) | Yes | Created plan, updated CLAUDE.md, created 7 docs files |
-| EDA (Section 2) | [Yes/No] | [Describe] |
-| Feature engineering (Section 4.1) | [Yes/No] | [Describe] |
-| Model training (Section 4.2–4.3) | [Yes/No] | [Describe] |
-| Evaluation (Section 4.4) | [Yes/No] | [Describe] |
-| SHAP analysis (Section 4.5) | [Yes/No] | [Describe] |
-| Results & reflection (Sections 5–6) | [Yes/No] | [Describe] |
-
----
-
-### 7.4 Validation of AI Outputs
-
-All AI-generated outputs were validated as follows:
-
-| Output Type | Validation Method |
-|-------------|------------------|
-| Code | Executed and checked for errors; reviewed for correctness of logic |
-| Documentation | Cross-checked against actual dataset schema and generation code |
-| Feature engineering ideas | Verified against known CLV formula in the data generation code |
-| SHAP explanations | Compared SHAP rankings to expected feature importance from the data generating process |
-| Metric interpretations | Checked against scikit-learn documentation and course materials |
-
-**Specific validation examples:**
-- The `total_spend_proxy` feature was verified to be meaningful by checking correlation with CLV in Section 2
-- SHAP feature rankings were compared to the known data generating formula to validate that the model learned correct patterns
-- [Add more specific examples from your validation]
+| Project Stage | AI Used? | Notes |
+|---------------|----------|-------|
+| Project planning & setup | Yes | Full plan created by AI, reviewed and approved |
+| EDA (Section 2) | Yes | Visualisation code generated, plots reviewed manually |
+| Feature engineering | Yes | Suggestions validated against data generating formula |
+| Model training | Yes | Function implementations generated, hyperparameters reviewed |
+| Evaluation | Partial | Results validated manually |
+| SHAP analysis | Yes | SHAP code generated, results compared against known formula (manually) |
+| Interpretation | Partial | Initial structure from AI, content written by student |
 
 ---
 
-### 7.5 Limitations of AI
+## 7.4 Validation of AI Outputs
 
-| Limitation | Example Encountered |
-|------------|-------------------|
-| Cannot run code | AI could not execute cells and verify that plots render correctly — this required manual testing |
-| Stale knowledge | [Did any library API change cause issues? E.g., shap API differences] |
-| Over-engineering | [Did AI suggest unnecessarily complex solutions that you simplified?] |
-| Hallucinations | [Did AI make incorrect claims about library behaviour or data?] |
-| No domain expertise | AI does not know the specifics of Swiss e-commerce or ZHAW grading criteria |
+| Output | Validation Method |
+|--------|------------------|
+| Dataset schema in docs | Cross-checked against actual DataFrame columns |
+| Feature engineering logic | Verified `total_spend_proxy` correlates strongly with CLV in EDA |
+| Model configurations | Compared to scikit-learn and XGBoost documentation |
+| SHAP rankings | Compared against known CLV formula coefficients |
+| Data leakage prevention | Verified scaler is fit on train only by checking mean/std |
 
 ---
 
-### 7.6 Reflection
+## 7.5 Limitations of AI
 
-> Write 3–5 sentences reflecting on what you learned about using AI in a data science workflow.
+Three key limitations were identified during the project:
 
-[Example: "Using Claude Code accelerated the initial project setup significantly — generating the seven documentation files would have taken hours manually. However, I found that AI is most useful as a starting point that requires refinement. The documentation templates needed to be personalised with my own observations from the data. The most important skill was knowing which AI outputs to trust (boilerplate structure, library syntax) versus which to verify carefully (feature engineering rationale, interpretation of SHAP results). I also noticed that giving the AI specific context (the full CLV formula, the exact column names) dramatically improved the quality of its output."]
+**Cannot interpret results correctly — human validation is essential.**
+The AI generated correct code for computing metrics and SHAP values, but its interpretation was shallow. It defaulted to recommending the model with the lowest RMSE without recognising that the simpler Linear Regression achieving nearly identical performance was the more meaningful finding — because it reveals the CLV relationship is fundamentally linear. SHAP rankings also needed manual cross-checking against the known data generating formula.
+
+**AI always suggests adding more complexity — but more is not always better.**
+The AI consistently proposed adding more derived features, interaction terms, and complex transformations. In practice, only two engineered features improved performance. The final results confirmed this: Linear Regression outperformed both tree-based models, demonstrating that complexity can hurt when the dominant signal is linear. The AI's bias toward complexity had to be actively counteracted.
+
+**Overconfident on default hyperparameters.**
+The AI initially suggested defaults (`n_estimators=100`, `max_depth=None`) without justification for a dataset of only 1,100 rows. When challenged, it acknowledged that `max_depth=None` allows fully grown trees — a known overfitting risk on small datasets — and recommended adjustments (reducing `max_depth`, adding `subsample`/`colsample_bytree`). AI tends to present defaults as universally good choices; the user must actively challenge these assumptions.
+
+---
+
+## 7.6 Reflection
+
+Using AI as a coding assistant significantly accelerated project setup and boilerplate code generation. The AI was particularly effective with specific, well-scoped prompts — vague requests produced generic and sometimes incorrect code.
+
+However, the project revealed that **AI cannot replace critical thinking about results**. The AI's interpretation was shallow: it focused on raw metrics without considering the broader picture (e.g., that a simple model matching a complex one is itself an important finding). The AI's **systematic bias toward complexity** had to be actively resisted — the final results validated the simpler approach. And **hyperparameter defaults** were presented without justification, requiring the student to explicitly challenge every assumption.
+
+The most productive use of AI was not as an advisor, but as a fast code generator whose outputs need careful human review. In future projects, a more structured validation workflow — systematically challenging every interpretation, default, and complexity suggestion — would be the recommended approach.

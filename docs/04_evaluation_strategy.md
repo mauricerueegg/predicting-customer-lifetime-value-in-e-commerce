@@ -125,11 +125,23 @@ A scatter plot of `y_test` vs. `y_pred` with the perfect prediction line (slope=
 
 Final comparison table:
 
-| Model | RMSE (test) | MAE (test) | R² (test) | RMSE (CV ± std) |
-|-------|------------|-----------|----------|----------------|
-| Linear Regression | ... | ... | ... | ... |
-| Random Forest | ... | ... | ... | ... |
-| XGBoost | ... | ... | ... | ... |
+| Model | RMSE (test) | MAE (test) | R² (test) | CV RMSE (mean ± std) |
+|-------|------------|-----------|----------|----------------------|
+| Linear Regression | 124.15 | 102.34 | 0.88 | 129.10 ± 5.42 |
+| Random Forest | 142.63 | 114.44 | 0.84 | 162.45 ± 8.35 |
+| XGBoost | 129.91 | 104.26 | 0.87 | 145.97 ± 7.41 |
+
+**Best model:** Linear Regression — lowest test RMSE (124.15 CHF, close to the theoretical noise floor of ~120 CHF), highest R² (0.88), and most stable CV score (lowest std of 5.42). This result reflects the predominantly linear structure of the CLV generating formula.
+
+**Overfitting diagnostic:**
+
+| Model | RMSE (train) | RMSE (test) | Gap (%) |
+|-------|-------------|------------|---------|
+| Linear Regression | 126.34 | 124.15 | -1.7% |
+| Random Forest | 58.63 | 142.63 | +143.3% |
+| XGBoost | 55.64 | 129.91 | +133.5% |
+
+Both tree models show severe overfitting (train RMSE ~55–59 vs. test RMSE ~130–143). Linear Regression shows no overfitting gap, confirming it generalises well on this dataset.
 
 **Decision criterion:** The model with the lowest test RMSE and stable CV score (small std) is considered the best performer. If CV and test scores diverge significantly, this is flagged as a potential overfitting or data split artefact.
 

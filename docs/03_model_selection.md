@@ -123,10 +123,12 @@ model_xgb.fit(X_train, y_train)
 | Model type | Linear | Non-linear ensemble | Non-linear boosting |
 | Handles interactions | Only via explicit FE | Yes (natively) | Yes (natively) |
 | Handles thresholds | No | Yes | Yes |
-| Overfitting risk | Low | Medium | Medium (regularised) |
+| Overfitting risk | Low | High (train-test gap 143%) | Medium (regularised, gap 134%) |
 | SHAP method | LinearExplainer | TreeExplainer | TreeExplainer |
-| Expected performance | Moderate | High | Highest |
+| Actual test performance | **Best** (RMSE 124, R² 0.88) | Lowest (RMSE 143, R² 0.84) | Middle (RMSE 130, R² 0.87) |
 | Interpretability | High (coefficients) | Low (mitigated by SHAP) | Low (mitigated by SHAP) |
+
+> **Key finding:** Linear Regression outperformed both tree-based models. This was initially unexpected but is explained by the fact that the CLV generating formula is predominantly linear. The non-linear interaction effects (premium order bonus, loyal tenure bonus, heavy discount threshold) are secondary to the dominant linear terms. With only 1,100 training samples, tree models overfit in their attempt to capture these small non-linear signals, resulting in higher test error. The engineered feature `total_spend_proxy` partially compensated for LR's inability to capture interactions natively.
 
 ---
 
